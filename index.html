@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>趣味英语语法绘本 📖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ====== Reset & Base ====== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;
+  min-height:100vh;min-height:100dvh;
+  background:linear-gradient(160deg,#fff5f5 0%,#f0fff4 40%,#fef9ef 100%);
+  color:#2d3436;overflow-x:hidden;
+  touch-action:manipulation;user-select:none;
+}
+
+/* ====== Shared ====== */
+.page{display:none;padding:0 16px 90px;max-width:520px;margin:0 auto}
+.page.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes popIn{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-6px)}}
+@keyframes starSpin{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.3) rotate(10deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes grammyBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.1)}}
+@keyframes cardFlip{0%{transform:rotateY(0)}100%{transform:rotateY(180deg)}}
+
+/* ====== Top Bar ====== */
+.top-bar{
+  display:flex;align-items:center;gap:8px;padding:12px 0 8px;
+  position:sticky;top:0;z-index:10;
+  background:linear-gradient(180deg,#fff5f5 0%,rgba(255,245,245,.95) 60%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.top-bar .back-btn{
+  width:38px;height:38px;border-radius:50%;border:none;background:#fff;
+  font-size:1.1rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:transform .15s;touch-action:manipulation;
+}
+.top-bar .back-btn:active{transform:scale(.88)}
+.top-bar .title{font-size:1rem;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-bar .sub{font-size:.75rem;color:#999;font-weight:500;flex-shrink:0}
+
+/* ====== Page: Home (Bookshelf) ====== */
+.home-header{
+  text-align:center;padding:28px 0 12px;
+  background:linear-gradient(135deg,#FF6B6B,#ee5a24);
+  margin:0 -16px 18px;border-radius:0 0 36px 36px;
+  box-shadow:0 6px 30px rgba(255,107,107,.3);position:relative;overflow:hidden;
+}
+.home-header::before{content:'✨⭐🌈🎉';position:absolute;top:8px;right:14px;font-size:1.3rem;opacity:.5}
+.home-header .mascot{font-size:3.2rem;display:block;margin-bottom:2px;animation:float 3s ease-in-out infinite}
+.home-header h1{font-size:1.6rem;color:#fff;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,.12)}
+.home-header p{font-size:.85rem;color:rgba(255,255,255,.85);margin-top:3px;font-weight:500}
+
+.stats-row{
+  display:flex;justify-content:center;gap:28px;margin:-8px auto 16px;
+  background:#fff;border-radius:18px;padding:10px 24px;max-width:300px;
+  box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+.stats-row .stat{text-align:center}
+.stats-row .stat-num{font-size:1.2rem;font-weight:900;color:#FF6B6B}
+.stats-row .stat-label{font-size:.72rem;color:#999;font-weight:500}
+
+/* Bookshelf */
+.bookshelf{display:flex;flex-direction:column;gap:14px;padding:0 4px}
+.book-card{
+  display:flex;align-items:center;gap:16px;
+  background:#fff;border-radius:22px;padding:16px 18px;
+  box-shadow:0 3px 16px rgba(0,0,0,.05);cursor:pointer;
+  transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;
+  touch-action:manipulation;
+}
+.book-card:active{transform:scale(.97)}
+.book-card.locked{opacity:.65;cursor:default}
+.book-card.locked:active{transform:none}
+.book-card .cover{
+  width:56px;height:76px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.book-card .cover.c1{background:linear-gradient(135deg,#FF6B6B,#ee5a24)}
+.book-card .cover.c2{background:linear-gradient(135deg,#4ECDC4,#2ecc71)}
+.book-card .cover.c3{background:linear-gradient(135deg,#A29BFE,#6c5ce7)}
+.book-card .cover.c4{background:linear-gradient(135deg,#FFE66D,#f9ca24)}
+.book-card .info{flex:1;min-width:0}
+.book-card .info .name{font-size:1.05rem;font-weight:700;color:#2d3436}
+.book-card .info .name .en{font-size:.78rem;font-weight:400;color:#aaa;margin-left:6px}
+.book-card .info .desc{font-size:.78rem;color:#999;margin-top:2px;line-height:1.3}
+.book-card .info .progress{font-size:.7rem;font-weight:600;color:#4ECDC4;margin-top:4px}
+.book-card .lock-icon{font-size:1.4rem;flex-shrink:0;opacity:.6}
+.book-card .status-badge{
+  font-size:.65rem;padding:3px 10px;border-radius:10px;font-weight:600;
+  flex-shrink:0;margin-left:4px;
+}
+.book-card .status-badge.new{background:#FFE66D;color:#5a4a00}
+.book-card .status-badge.doing{background:#e3fafc;color:#4ECDC4}
+.book-card .status-badge.done{background:#f0fff4;color:#27ae60}
+.book-card .status-badge.locked{background:#f1f2f6;color:#b2bec3}
+
+/* Grammy Assistant */
+.grammy-bubble{
+  display:flex;align-items:flex-start;gap:10px;
+  background:#fff;border-radius:18px;padding:14px 16px;margin-bottom:16px;
+  box-shadow:0 2px 12px rgba(0,0,0,.04);border-left:3px solid #FFE66D;
+}
+.grammy-bubble .avatar{font-size:2.2rem;flex-shrink:0;animation:float 3s ease-in-out infinite}
+.grammy-bubble .text{font-size:.9rem;line-height:1.5;color:#555}
+.grammy-bubble .text strong{color:#FF6B6B}
+
+/* ====== Page: Chapters ====== */
+.chapter-list{display:flex;flex-direction:column;gap:10px;padding:4px}
+.chapter-item{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:#fff;border-radius:16px;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.04);transition:transform .15s;
+  touch-action:manipulation;
+}
+.chapter-item:active{transform:scale(.98)}
+.chapter-item.done{background:#f0fff4}
+.chapter-item.locked{opacity:.5;cursor:default}
+.chapter-item.locked:active{transform:none}
+.chapter-item .num{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:700;color:#fff;
+}
+.chapter-item .num.n1{background:linear-gradient(135deg,#FF6B6B,#ee5a24)}
+.chapter-item .num.n2{background:linear-gradient(135deg,#4ECDC4,#2ecc71)}
+.chapter-item .num.n3{background:linear-gradient(135deg,#A29BFE,#6c5ce7)}
+.chapter-item .info{flex:1;min-width:0}
+.chapter-item .info .name{font-size:.95rem;font-weight:600}
+.chapter-item .info .name .en{font-size:.75rem;font-weight:400;color:#aaa;margin-left:4px}
+.chapter-item .info .desc{font-size:.72rem;color:#999;margin-top:2px}
+.chapter-item .star{font-size:1.2rem;flex-shrink:0}
+
+/* ====== Page: Lesson ====== */
+.lesson-page{
+  background:#fff;border-radius:24px;padding:24px 20px;margin:8px 0 16px;
+  box-shadow:0 4px 24px rgba(0,0,0,.05);position:relative;overflow:hidden;
+  min-height:400px;animation:slideIn .35s ease;
+}
+.lesson-page .page-num{
+  position:absolute;top:14px;right:18px;font-size:.75rem;color:#ddd;font-weight:600;
+}
+.lesson-page .grammy-box{
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;
+  background:linear-gradient(135deg,#FFF9E6,#FFF5F5);border-radius:16px;
+  padding:14px 16px;border:1px solid rgba(255,230,109,.3);
+}
+.lesson-page .grammy-box .g-icon{font-size:2.4rem;flex-shrink:0}
+.lesson-page .grammy-box .g-text{font-size:.88rem;line-height:1.6;color:#555;font-weight:500}
+.lesson-page h3{font-size:1.1rem;font-weight:700;color:#FF6B6B;margin-bottom:8px}
+.lesson-page h3 .emoji{margin-right:6px}
+.lesson-page p{font-size:.92rem;line-height:1.7;color:#444;margin-bottom:10px}
+.lesson-page p .hl{color:#FF6B6B;font-weight:700;cursor:pointer;border-bottom:2px dashed #FFE66D;padding:0 2px;transition:background .2s}
+.lesson-page p .hl:active{background:#FFF5F5;border-radius:4px}
+
+/* Example Cards */
+.example-card{
+  background:linear-gradient(135deg,#f8f9ff,#f0fff4);border-radius:16px;
+  padding:14px 16px;margin-bottom:12px;border:1px solid rgba(78,205,196,.15);
+}
+.example-card .ex-en{font-size:1rem;font-weight:600;color:#2d3436;line-height:1.6}
+.example-card .ex-en .hl-w{color:#4ECDC4;font-weight:700;cursor:pointer;border-bottom:2px dashed #4ECDC4;padding:0 2px}
+.example-card .ex-zh{font-size:.78rem;color:#888;margin-top:4px}
+.example-card .ex-tag{
+  display:inline-block;font-size:.65rem;padding:2px 8px;border-radius:6px;
+  font-weight:600;margin-top:6px;
+}
+.example-card .ex-tag.t1{background:#FFE66D;color:#5a4a00}
+.example-card .ex-tag.t2{background:#e3fafc;color:#4ECDC4}
+.example-card .ex-tag.t3{background:#fce4ec;color:#FF6B6B}
+
+/* Rule Box */
+.rule-box{
+  background:linear-gradient(135deg,#FF6B6B,#ee5a24);border-radius:16px;
+  padding:16px 18px;margin-bottom:14px;color:#fff;
+}
+.rule-box .r-title{font-size:.82rem;font-weight:700;opacity:.9;margin-bottom:6px}
+.rule-box .r-body{font-size:1rem;line-height:1.6;font-weight:500}
+.rule-box .r-body .r-hl{background:rgba(255,255,255,.25);padding:2px 8px;border-radius:6px}
+
+/* Interactive Zone */
+.interactive-zone{
+  background:linear-gradient(135deg,#FFF9E6,#FFF5F5);border-radius:18px;
+  padding:18px;margin-top:14px;border:2px dashed #FFE66D;
+  text-align:center;
+}
+.interactive-zone .iz-title{font-size:.85rem;font-weight:700;color:#5a4a00;margin-bottom:12px}
+.interactive-zone .iz-title .emoji{margin-right:4px}
+.interactive-zone .sentence{font-size:1.1rem;font-weight:600;color:#2d3436;margin-bottom:14px;line-height:1.8}
+.interactive-zone .sentence .blank{
+  display:inline-block;min-width:60px;border-bottom:3px dashed #FF6B6B;
+  color:#FF6B6B;padding:0 6px;cursor:pointer;min-height:28px;
+  transition:all .2s;position:relative;
+}
+.interactive-zone .sentence .blank.filled{border-color:#4ECDC4;color:#4ECDC4;font-weight:900}
+.interactive-zone .sentence .blank.wrong{border-color:#FF6B6B;animation:shake .4s ease;color:#FF6B6B}
+.interactive-zone .options-row{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px;
+}
+.interactive-zone .opt-chip{
+  padding:8px 18px;border-radius:12px;border:2px solid #ddd;background:#fff;
+  font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;
+  touch-action:manipulation;
+}
+.interactive-zone .opt-chip:active{transform:scale(.92)}
+.interactive-zone .opt-chip.selected{border-color:#4ECDC4;background:#f0fff4;color:#4ECDC4}
+.interactive-zone .opt-chip.used{opacity:.3;pointer-events:none}
+.interactive-zone .iz-feedback{font-size:.85rem;font-weight:600;margin-top:10px;min-height:24px}
+.interactive-zone .iz-feedback.ok{color:#27ae60}
+.interactive-zone .iz-feedback.fail{color:#FF6B6B}
+.interactive-zone .iz-btn{
+  margin-top:12px;padding:10px 24px;border-radius:14px;border:none;
+  font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;
+  transition:transform .15s;touch-action:manipulation;
+}
+.interactive-zone .iz-btn:active{transform:scale(.94)}
+
+/* Click to Reveal Cards */
+.reveal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.reveal-card{
+  background:#fff;border:2px solid #eee;border-radius:16px;padding:16px 12px;
+  text-align:center;cursor:pointer;transition:all .3s;min-height:70px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  touch-action:manipulation;
+}
+.reveal-card:active{transform:scale(.96)}
+.reveal-card .front{font-size:.95rem;font-weight:600;color:#999}
+.reveal-card .back{display:none;font-size:1rem;font-weight:700;color:#FF6B6B}
+.reveal-card .back .ex{font-size:.78rem;font-weight:400;color:#888;margin-top:4px}
+.reveal-card.flipped{border-color:#FFE66D;background:#FFF9E6}
+.reveal-card.flipped .front{display:none}
+.reveal-card.flipped .back{display:block;animation:popIn .3s ease}
+
+/* Slider */
+.slider-container{margin:12px 0;text-align:center}
+.slider-container input[type=range]{
+  -webkit-appearance:none;width:100%;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,#4ECDC4,#FFE66D);outline:none;
+}
+.slider-container input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:28px;height:28px;border-radius:50%;
+  background:#FF6B6B;cursor:pointer;box-shadow:0 2px 8px rgba(255,107,107,.3);
+}
+.slider-container .slider-label{font-size:.82rem;color:#666;margin-top:6px;font-weight:600}
+
+/* Page Navigation */
+.page-nav{
+  display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;
+}
+.page-nav .nav-btn{
+  padding:10px 20px;border-radius:14px;border:none;font-size:.88rem;
+  font-weight:700;font-family:inherit;cursor:pointer;
+  transition:transform .15s;touch-action:manipulation;
+  display:flex;align-items:center;gap:6px;
+}
+.page-nav .nav-btn:active{transform:scale(.93)}
+.page-nav .nav-btn.prev{background:#f1f2f6;color:#636e72}
+.page-nav .nav-btn.next{background:linear-gradient(135deg,#FF6B6B,#ee5a24);color:#fff;box-shadow:0 3px 12px rgba(255,107,107,.25)}
+.page-nav .nav-btn.next:disabled{opacity:.5;cursor:default}
+.page-nav .nav-btn.finish{background:linear-gradient(135deg,#4ECDC4,#2ecc71);color:#fff;box-shadow:0 3px 12px rgba(78,205,196,.25)}
+.page-nav .dots{display:flex;gap:5px}
+.page-nav .dots .dot{width:7px;height:7px;border-radius:50%;background:#ddd;transition:all .3s}
+.page-nav .dots .dot.active{background:#FF6B6B;width:18px;border-radius:4px}
+
+/* ====== Lesson Complete Overlay ====== */
+.complete-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;
+  background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+.complete-modal{
+  background:#fff;border-radius:32px;padding:36px 28px;text-align:center;
+  max-width:340px;width:90%;animation:popIn .5s ease;
+}
+.complete-modal .big-icon{font-size:3.6rem;display:block;margin-bottom:6px;animation:grammyBounce .6s ease}
+.complete-modal .star-display{font-size:2.8rem;margin:8px 0}
+.complete-modal .star-display .s{display:inline-block;animation:starSpin .5s ease forwards;opacity:0}
+.complete-modal .star-display .s:nth-child(1){animation-delay:.1s}
+.complete-modal .star-display .s:nth-child(2){animation-delay:.3s}
+.complete-modal .star-display .s:nth-child(3){animation-delay:.5s}
+.complete-modal .title{font-size:1.3rem;font-weight:900;color:#FF6B6B;margin-bottom:4px}
+.complete-modal .sub{font-size:.9rem;color:#888;margin-bottom:18px;line-height:1.4}
+.complete-modal .btn-group{display:flex;flex-direction:column;gap:10px}
+.complete-modal .btn-group button{
+  padding:12px;border-radius:16px;border:none;font-size:.95rem;
+  font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s;
+  touch-action:manipulation;
+}
+.complete-modal .btn-group button:active{transform:scale(.96)}
+.complete-modal .btn-group .btn-primary{background:linear-gradient(135deg,#4ECDC4,#2ecc71);color:#fff}
+.complete-modal .btn-group .btn-secondary{background:#f1f2f6;color:#636e72}
+
+/* ====== Confetti ====== */
+.confetti-box{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:101;overflow:hidden}
+.confetti-piece{
+  position:absolute;width:8px;height:8px;top:-10px;border-radius:2px;
+  animation:confettiFall linear forwards;
+}
+
+/* ====== Page: Progress ====== */
+.progress-card{background:#fff;border-radius:24px;padding:24px;margin-top:16px;box-shadow:0 3px 16px rgba(0,0,0,.04)}
+.progress-card .p-title{font-size:1rem;font-weight:700;margin-bottom:16px}
+.progress-card .p-bar{height:10px;background:#f1f2f6;border-radius:5px;overflow:hidden;margin-bottom:12px}
+.progress-card .p-bar .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#FF6B6B,#FFE66D,#4ECDC4);transition:width .6s ease}
+.progress-card .p-stat{display:flex;justify-content:space-between;font-size:.8rem;color:#888;margin-bottom:16px}
+.progress-card .book-progress{margin-bottom:12px}
+.progress-card .book-progress .bp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.progress-card .book-progress .bp-row .bp-name{font-size:.82rem;font-weight:600;flex:1}
+.progress-card .book-progress .bp-row .bp-bar{flex:2;height:6px;background:#f1f2f6;border-radius:3px;overflow:hidden}
+.progress-card .book-progress .bp-row .bp-bar .fill{height:100%;border-radius:3px;transition:width .6s ease}
+.progress-card .book-progress .bp-row .bp-num{font-size:.75rem;color:#999;min-width:35px;text-align:right}
+
+/* ====== Popup ====== */
+.popup-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .2s ease;
+}
+.popup-card{
+  background:#fff;border-radius:24px;padding:24px 20px;max-width:300px;width:85%;
+  text-align:center;animation:popIn .3s ease;box-shadow:0 8px 40px rgba(0,0,0,.12);
+}
+.popup-card .p-icon{font-size:2.8rem;display:block;margin-bottom:6px}
+.popup-card .p-title{font-size:1rem;font-weight:700;color:#2d3436;margin-bottom:4px}
+.popup-card .p-body{font-size:.85rem;color:#666;line-height:1.5;margin-bottom:14px}
+.popup-card .p-btn{
+  padding:8px 28px;border-radius:12px;border:none;font-size:.88rem;
+  font-weight:700;font-family:inherit;background:linear-gradient(135deg,#FF6B6B,#ee5a24);
+  color:#fff;cursor:pointer;transition:transform .15s;
+  touch-action:manipulation;
+}
+.popup-card .p-btn:active{transform:scale(.94)}
+
+/* ====== Welcome Animation ====== */
+.welcome-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;
+  background:linear-gradient(135deg,#FF6B6B,#ee5a24);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease,transform .6s ease;
+}
+.welcome-overlay.hide{opacity:0;transform:scale(1.1);pointer-events:none}
+.welcome-overlay .w-mascot{font-size:5rem;animation:grammyBounce 1s ease infinite}
+.welcome-overlay h1{font-size:2rem;color:#fff;font-weight:900;margin-top:12px;text-shadow:0 3px 12px rgba(0,0,0,.15)}
+.welcome-overlay p{font-size:1rem;color:rgba(255,255,255,.85);margin-top:6px}
+.welcome-overlay .w-btn{
+  margin-top:28px;padding:14px 44px;border-radius:24px;border:none;
+  font-size:1.1rem;font-weight:700;font-family:inherit;background:#fff;
+  color:#FF6B6B;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.15);
+  transition:transform .15s;touch-action:manipulation;
+}
+.welcome-overlay .w-btn:active{transform:scale(.94)}
+.welcome-overlay .w-stars{
+  position:absolute;font-size:1.5rem;animation:float 4s ease-in-out infinite;
+}
+.welcome-overlay .w-stars:nth-child(1){top:15%;left:10%;animation-delay:0s}
+.welcome-overlay .w-stars:nth-child(2){top:25%;right:12%;animation-delay:.5s}
+.welcome-overlay .w-stars:nth-child(3){bottom:30%;left:8%;animation-delay:1s}
+.welcome-overlay .w-stars:nth-child(4){bottom:20%;right:15%;animation-delay:1.5s}
+
+/* ====== Viewport ====== */
+@media(min-width:500px){
+  .page{padding:0 24px 90px;max-width:600px}
+  .home-header{margin:0 -24px 18px}
+  .reveal-grid{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== Welcome ====== -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <span class="w-stars">⭐</span><span class="w-stars">📖</span><span class="w-stars">🌈</span><span class="w-stars">✨</span>
+  <div class="w-mascot">📖</div>
+  <h1>英语语法绘本</h1>
+  <p>和 Grammy 小猫一起开心学语法 🐱</p>
+  <button class="w-btn" onclick="dismissWelcome()">开始学习 🎉</button>
+</div>
+
+<!-- ====== HOME ====== -->
+<div id="page-home" class="page active">
+  <div class="home-header">
+    <span class="mascot">🐱</span>
+    <h1>趣味英语语法绘本</h1>
+    <p>和 Grammy 一起，翻书学语法 📖</p>
+  </div>
+  <div class="grammy-bubble">
+    <span class="avatar">🐱</span>
+    <div class="text">你好呀！我是 <strong>Grammy</strong> 小猫 🐱<br>让我带你翻看这 4 本语法书，一起发现英语的奥秘吧！</div>
+  </div>
+  <div class="stats-row" id="statsRow">
+    <div class="stat"><div class="stat-num" id="totalStars">0</div><div class="stat-label">⭐ 星星</div></div>
+    <div class="stat"><div class="stat-num" id="totalLessons">0</div><div class="stat-label">📖 已学</div></div>
+    <div class="stat"><div class="stat-num" id="totalProgress">0%</div><div class="stat-label">📊 进度</div></div>
+  </div>
+  <div class="bookshelf" id="bookshelf"></div>
+</div>
+
+<!-- ====== CHAPTERS ====== -->
+<div id="page-chapters" class="page">
+  <div class="top-bar" id="chaptersTopBar">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="title" id="chaptersTitle">第1册 基础篇</span>
+    <span class="sub" id="chaptersSub">0/0</span>
+  </div>
+  <div class="chapter-list" id="chapterList"></div>
+</div>
+
+<!-- ====== LESSON ====== -->
+<div id="page-lesson" class="page">
+  <div class="top-bar" id="lessonTopBar">
+    <button class="back-btn" onclick="exitLesson()">←</button>
+    <span class="title" id="lessonTitle">课程名</span>
+    <span class="sub" id="lessonPageCounter">1/4</span>
+  </div>
+  <div id="lessonContent"></div>
+  <div class="page-nav" id="lessonNav">
+    <button class="nav-btn prev" id="prevBtn" onclick="prevPage()">← 上页</button>
+    <div class="dots" id="pageDots"></div>
+    <button class="nav-btn next" id="nextBtn" onclick="nextPage()">下页 →</button>
+  </div>
+</div>
+
+<!-- ====== PROGRESS ====== -->
+<div id="page-progress" class="page">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="title">📊 我的学习进度</span>
+  </div>
+  <div class="progress-card" id="progressCard"></div>
+</div>
+
+<!-- ====== Popup Container ====== -->
+<div id="popupContainer"></div>
+
+<script>
+// ======================================================================
+// DATA: Books & Lessons (Based on 趣味英语语法 1-4册)
+// ======================================================================
+const BOOKS = [
+  {
+    id:1, icon:'📘', name:'基础篇', nameEn:'Basics',
+    color:'c1', desc:'认识英语的8大词类，学习名词、形容词、句子结构',
+    lessons:[
+      {id:'b1l1', num:1, name:'词类', nameEn:'Parts of Speech', icon:'🎯',
+       desc:'英语里的词可以放进8个"箱子"里',
+       pages:[
+         {type:'intro', title:'词类 — 8个神奇的箱子', grammy:'你知道吗？英语里所有的词，都可以放进 8 个"箱子"里！每个箱子里装的词都有不同的本领。让我们一个一个打开看看吧！',
+          content:'<div class="rule-box"><div class="r-title">📦 词类 (Parts of Speech)</div><div class="r-body">英语里的词分为 <span class="r-hl">8 种</span>，叫做"词类" (Parts of Speech)：</div></div>'},
+         {type:'cards', title:'8个箱子', grammy:'来看看每个箱子里都装着什么词吧！点击每个箱子看看里面的宝贝 ✨',
+          items:[
+            {front:'名词 🏷️', back:'表示人、动物、事物的名称<br><span class="ex">boy, cat, book, China</span>'},
+            {front:'代词 🔄', back:'代替名词<br><span class="ex">I, you, he, she, it, we, they</span>'},
+            {front:'形容词 🎨', back:'形容名词的样子<br><span class="ex">big, small, tall, happy</span>'},
+            {front:'动词 🏃', back:'表示动作或状态<br><span class="ex">run, eat, sleep, is, are</span>'},
+            {front:'副词 📍', back:'修饰动词、形容词<br><span class="ex">quickly, very, always, here</span>'},
+            {front:'介词 🔗', back:'表示位置、时间关系<br><span class="ex">in, on, at, under, behind</span>'},
+            {front:'连词 🤝', back:'连接词与词、句与句<br><span class="ex">and, but, or, because</span>'},
+            {front:'感叹词 😲', back:'表示强烈感情<br><span class="ex">Oh! Hello! Wow! Ouch!</span>'},
+          ]},
+         {type:'examples', title:'一起来找词类！', grammy:'看看下面这个句子，每种颜色的词属于不同的词类哦！你认识它们吗？',
+          examples:[
+            {en:'The <span class="hl-w">happy</span> <span class="hl-w">boy</span> <span class="hl-w">quickly</span> <span class="hl-w">ran</span> <span class="hl-w">into</span> the house.', zh:'那个开心的男孩飞快地跑进了房子。',
+             tags:[{text:'形容词 happy',cls:'t1'},{text:'名词 boy',cls:'t2'},{text:'副词 quickly',cls:'t3'},{text:'动词 ran',cls:'t1'},{text:'介词 into',cls:'t2'}]},
+            {en:'<span class="hl-w">She</span> <span class="hl-w">and</span> I <span class="hl-w">are</span> <span class="hl-w">good</span> friends.', zh:'她和我好朋友。',
+             tags:[{text:'代词 She',cls:'t1'},{text:'连词 and',cls:'t3'},{text:'动词 are',cls:'t2'},{text:'形容词 good',cls:'t1'}]},
+          ]},
+         {type:'interactive', title:'动手试试', grammy:'你能把下面的词放进正确的"箱子"里吗？',
+          sentence:'___ is a happy cat.', blank:0,
+          options:['She','Quickly','Oh','Because'],
+          correct:'She', hint:'这里需要一个代表"人/动物"的词——代词 She！',
+          explanation:'She 是代词(代词箱)，代替名词。'},
+       ]},
+      {id:'b1l2', num:2, name:'名词', nameEn:'Nouns', icon:'🏷️',
+       desc:'名词是人、动物、事物的名称',
+       pages:[
+         {type:'intro', title:'名词 — 万物的名字', grammy:'名词 (Nouns) 是任何东西的名称。人、动物、事物——都有自己的名字！',
+          content:'<div class="rule-box"><div class="r-title">🔤 什么是名词？</div><div class="r-body"><span class="r-hl">名词</span> 是人、动物、事物的名称。<br>比如：<span class="r-hl">boy</span>（男孩）、<span class="r-hl">cat</span>（猫）、<span class="r-hl">book</span>（书）</div></div>'},
+         {type:'examples', title:'三种名词', grammy:'名词可以分成三大类，每一种都有不同的名字！',
+          examples:[
+            {en:'<span class="hl-w">The boy</span> saw his brother.', zh:'那个男孩看到了他的哥哥。', tags:[{text:'👤 人: boy, brother',cls:'t1'}]},
+            {en:'<span class="hl-w">The cat</span> caught a <span class="hl-w">mouse</span>.', zh:'那只猫抓到了一只老鼠。', tags:[{text:'🐶 动物: cat, mouse',cls:'t2'}]},
+            {en:'There is a <span class="hl-w">book</span> on the <span class="hl-w">table</span>.', zh:'桌子上有一本书。', tags:[{text:'📦 事物: book, table',cls:'t3'}]},
+            {en:'Put the <span class="hl-w">chalk</span> on the <span class="hl-w">blackboard</span>.', zh:'把粉笔放在黑板上。', tags:[{text:'📦 事物: chalk, blackboard',cls:'t1'}]},
+          ]},
+         {type:'interactive', title:'找名词', grammy:'点击下面句子中所有名词，把它们找出来！',
+          sentence:'The dog runs after the cat in the garden.', highlightWords:[{word:'dog',type:'animal'},{word:'cat',type:'animal'},{word:'garden',type:'thing'}],
+          message:'找到所有名词了！<br>dog(动物)🐶, cat(动物)🐱, garden(事物)🌳'},
+       ]},
+      {id:'b1l3', num:3, name:'名词的数', nameEn:'Singular & Plural', icon:'🔢',
+       desc:'一个和多个——名词变复数',
+       pages:[
+         {type:'intro', title:'一个 还是 多个？', grammy:'当我们说"一个"的时候用单数，说"多个"的时候就要变复数啦！怎么变呢？一起来看看吧！',
+          content:'<div class="rule-box"><div class="r-title">📐 名词变复数规则</div><div class="r-body">大部分名词加 <span class="r-hl">s</span> 变成复数：<br>one <span class="r-hl">dog</span> → two <span class="r-hl">dogs</span> 🐕🐕</div></div>'},
+         {type:'examples', title:'单数 → 复数', grammy:'看看这些词是怎么变化的：',
+          examples:[
+            {en:'one <span class="hl-w">boy</span> → two <span class="hl-w">boys</span>', zh:'一个男孩 → 两个男孩', tags:[{text:'直接加 s',cls:'t1'}]},
+            {en:'one <span class="hl-w">dog</span> → three <span class="hl-w">dogs</span>', zh:'一只狗 → 三只狗', tags:[{text:'直接加 s',cls:'t1'}]},
+            {en:'one <span class="hl-w">box</span> → four <span class="hl-w">boxes</span>', zh:'一个盒子 → 四个盒子', tags:[{text:'以 x 结尾加 es',cls:'t2'}]},
+            {en:'one <span class="hl-w">bus</span> → two <span class="hl-w">buses</span>', zh:'一辆公交车 → 两辆', tags:[{text:'以 s 结尾加 es',cls:'t2'}]},
+          ]},
+         {type:'interactive', title:'来变一变！', grammy:'把下面的单数变成复数吧！点击正确的选项：',
+          sentence:'one ____, two ____', isPluralGame:true,
+          pairs:[{single:'cat',plural:'cats'},{single:'box',plural:'boxes'},{single:'bus',plural:'buses'},{single:'dog',plural:'dogs'}],
+          options:['cats','boxes','buses','dogs','cat','box'],
+          correctPlural:'cats'},
+       ]},
+      {id:'b1l4', num:4, name:'性质形容词', nameEn:'Adjectives', icon:'🎨',
+       desc:'用形容词描述事物',
+       pages:[
+         {type:'intro', title:'形容词 — 给名词"化妆"', grammy:'形容词 (Adjectives) 是用来形容名词的，告诉我们"什么样的"。比如 big cat, small dog!',
+          content:'<div class="rule-box"><div class="r-title">🎨 形容词</div><div class="r-body"><span class="r-hl">形容词</span> 用来修饰名词，说出事物的特征：<br>大小、颜色、形状、感觉...</div></div>'},
+         {type:'examples', title:'形容词让句子更生动', grammy:'看看加上形容词后，句子是不是更有画面感了？',
+          examples:[
+            {en:'a <span class="hl-w">big</span> dog', zh:'一只大狗', tags:[{text:'大小: big, small, tall',cls:'t1'}]},
+            {en:'a <span class="hl-w">red</span> apple', zh:'一个红苹果', tags:[{text:'颜色: red, blue, green',cls:'t2'}]},
+            {en:'a <span class="hl-w">happy</span> girl', zh:'一个开心的女孩', tags:[{text:'感觉: happy, sad, hungry',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'选对形容词', grammy:'选一个合适的形容词填入空格：',
+          sentence:'The elephant is very ___.', blank:0,
+          options:['big','small','tall'],
+          correct:'big', hint:'大象很大，所以用 big！',
+          explanation:'big 是形容词，形容大象的体型。'},
+       ]},
+      {id:'b1l5', num:5, name:'数量形容词', nameEn:'Quantitative Adj', icon:'📊',
+       desc:'表示"多少"的词',
+       pages:[
+         {type:'intro', title:'多少？ 用数量形容词！', grammy:'当我们想说"很多""一些""几个"的时候，就要用到数量形容词啦！',
+          content:'<div class="rule-box"><div class="r-title">📊 数量形容词</div><div class="r-body"><span class="r-hl">many</span> + 可数名词 (many books)<br><span class="r-hl">much</span> + 不可数名词 (much water)<br><span class="r-hl">some</span> + 都可以 (some food)<br><span class="r-hl">a few</span> = 几个</div></div>'},
+         {type:'examples', title:'数量形容词的用法', grammy:'看看它们怎么用在句子里：',
+          examples:[
+            {en:'I have <span class="hl-w">many</span> books.', zh:'我有很多书。', tags:[{text:'many + 可数',cls:'t1'}]},
+            {en:'She has <span class="hl-w">much</span> milk.', zh:'她有很多牛奶。', tags:[{text:'much + 不可数',cls:'t2'}]},
+            {en:'There are <span class="hl-w">a few</span> cats.', zh:'有几只猫。', tags:[{text:'a few = 几个',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'选一选', grammy:'用 many 还是 much 呢？',
+          sentence:'How ___ apples do you have?', blank:0,
+          options:['many','much','some'],
+          correct:'many', hint:'apple 是可数名词，所以用 many',
+          explanation:'apples 是可数名词复数，用 many。'},
+       ]},
+      {id:'b1l6', num:6, name:'指示形容词', nameEn:'This/That/These/Those', icon:'👉',
+       desc:'这个、那个、这些、那些',
+       pages:[
+         {type:'intro', title:'"这个"和"那个"', grammy:'英语里用 this/that/these/those 来表示"这个""那个""这些""那些"。',
+          content:'<div class="rule-box"><div class="r-title">👉 指示词</div><div class="r-body"><span class="r-hl">this</span> (这个) → <span class="r-hl">these</span> (这些)<br><span class="r-hl">that</span> (那个) → <span class="r-hl">those</span> (那些)</div></div>'},
+         {type:'examples', title:'近和远', grammy:'离得近用 this/these，离得远用 that/those！',
+          examples:[
+            {en:'<span class="hl-w">This</span> book is mine.', zh:'这本书是我的。', tags:[{text:'近处单数: this',cls:'t1'}]},
+            {en:'<span class="hl-w">These</span> cats are cute.', zh:'这些猫很可爱。', tags:[{text:'近处复数: these',cls:'t2'}]},
+            {en:'<span class="hl-w">That</span> car is red.', zh:'那辆车是红色的。', tags:[{text:'远处单数: that',cls:'t1'}]},
+            {en:'<span class="hl-w">Those</span> dogs are big.', zh:'那些狗很大。', tags:[{text:'远处复数: those',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'选哪个？', grammy:'近还是远？一个还是多个？',
+          sentence:'___ cats over there are black.', blank:0,
+          options:['This','That','These','Those'],
+          correct:'Those', hint:'over there 表示"那边"——远处，cats 是复数！',
+          explanation:'over there = 远处 + cats 复数 = Those'},
+       ]},
+      {id:'b1l7', num:7, name:'句子和短语', nameEn:'Sentences & Phrases', icon:'📝',
+       desc:'怎么组成一个完整的句子',
+       pages:[
+         {type:'intro', title:'什么是句子？', grammy:'把词按照正确的顺序排好，就得到句子啦！一个完整的句子要有"谁"+"做什么"。',
+          content:'<div class="rule-box"><div class="r-title">📝 句子结构</div><div class="r-body">一个完整的句子至少要有：<br><span class="r-hl">主语</span> (谁) + <span class="r-hl">动词</span> (做什么)<br>The boy runs.</div></div>'},
+         {type:'examples', title:'句子 vs 短语', grammy:'短语 (Phrase) 不是完整的句子哦！看看区别：',
+          examples:[
+            {en:'<span class="hl-w">The boy runs.</span> (句子)', zh:'那个男孩在跑步。', tags:[{text:'✅ 完整句子',cls:'t2'}]},
+            {en:'<span class="hl-w">a happy boy</span> (短语)', zh:'一个开心的男孩', tags:[{text:'❌ 只是一个短语',cls:'t3'}]},
+            {en:'<span class="hl-w">The cat is sleeping.</span> (句子)', zh:'那只猫在睡觉。', tags:[{text:'✅ 完整句子',cls:'t1'}]},
+          ]},
+         {type:'interactive', title:'是句子还是短语？', grammy:'判断下面的说法是句子还是短语：',
+          sentence:'"a big house"', isJudge:true, correctAnswer:'phrase',
+          explanation:'"a big house" 没有动词，只是一个短语！'},
+       ]},
+      {id:'b1l8', num:8, name:'句子的宾语', nameEn:'Objects', icon:'🎯',
+       desc:'动作的"对象"是谁',
+       pages:[
+         {type:'intro', title:'宾语 — 动作的对象', grammy:'当一个人做动作时，这个动作往往作用在某个"对象"上——这个"对象"就是宾语 (Object)！',
+          content:'<div class="rule-box"><div class="r-title">🎯 宾语</div><div class="r-body"><span class="r-hl">宾语</span> 是动作的对象，跟在动词后面。<br>I kick <span class="r-hl">the ball</span>.<br>（我踢 → 踢什么？→ 球）</div></div>'},
+         {type:'examples', title:'找到宾语', grammy:'看看每个句子里的宾语是谁，用颜色标出来了：',
+          examples:[
+            {en:'The boy kicked <span class="hl-w">the ball</span>.', zh:'男孩踢了球。', tags:[{text:'🎯 宾语: the ball',cls:'t1'}]},
+            {en:'She reads <span class="hl-w">a book</span>.', zh:'她读了一本书。', tags:[{text:'🎯 宾语: a book',cls:'t2'}]},
+            {en:'The cat caught <span class="hl-w">a mouse</span>.', zh:'猫抓了一只老鼠。', tags:[{text:'🎯 宾语: a mouse',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'找宾语', grammy:'点击下面句子中的宾语：',
+          sentence:'The girl eats an apple.', highlightWords:[{word:'apple',type:'object'}],
+          message:'对了！apple 是"吃"的宾语 🎯'},
+       ]},
+      {id:'b1l9', num:9, name:'介词和短语', nameEn:'Prepositions', icon:'📍',
+       desc:'用介词说"在哪里"',
+       pages:[
+         {type:'intro', title:'介词 — 位置小帮手', grammy:'介词 (Prepositions) 帮我们说明"在哪里""什么时候""怎么去"。in, on, at, under 是最常用的几个！',
+          content:'<div class="rule-box"><div class="r-title">📍 常用介词</div><div class="r-body"><span class="r-hl">in</span> 在...里面<br><span class="r-hl">on</span> 在...上面<br><span class="r-hl">under</span> 在...下面<br><span class="r-hl">behind</span> 在...后面</div></div>'},
+         {type:'examples', title:'介词怎么用', grammy:'看看介词在句子中的位置：',
+          examples:[
+            {en:'The book is <span class="hl-w">on</span> the table.', zh:'书在桌子上。', tags:[{text:'📍 on = 在...上',cls:'t1'}]},
+            {en:'The cat is <span class="hl-w">in</span> the box.', zh:'猫在盒子里。', tags:[{text:'📍 in = 在...里',cls:'t2'}]},
+            {en:'The dog is <span class="hl-w">under</span> the chair.', zh:'狗在椅子下面。', tags:[{text:'📍 under = 在...下',cls:'t3'}]},
+            {en:'The boy is <span class="hl-w">behind</span> the door.', zh:'男孩在门后面。', tags:[{text:'📍 behind = 在...后',cls:'t1'}]},
+          ]},
+         {type:'interactive', title:'选介词', grammy:'猫在哪里？选一个合适的介词：',
+          sentence:'The cat is ___ the table. (桌子下面)', blank:0,
+          options:['on','in','under','behind'],
+          correct:'under', hint:'"下面"用 under',
+          explanation:'under the table = 在桌子下面。'},
+       ]},
+    ]},
+  {
+    id:2, icon:'📙', name:'进阶篇', nameEn:'Intermediate',
+    color:'c2', desc:'深入学习复数、物主形容词、比较级、冠词、时态',
+    lessons:[
+      {id:'b2l1', num:1, name:'名词复数深入', nameEn:'Plural Rules', icon:'🔢',
+       desc:'更多复数变化规则',
+       pages:[
+         {type:'intro', title:'复数更多规则', grammy:'除了加s，有些名词变复数还有特殊规则。来看看吧！',
+          content:'<div class="rule-box"><div class="r-title">🔥 名词复数特殊规则</div><div class="r-body">以 <span class="r-hl">s, x, ch, sh</span> 结尾 → 加 <span class="r-hl">es</span><br>bus → buses, box → boxes<br>以 <span class="r-hl">辅音+y</span> 结尾 → 变 y 为 <span class="r-hl">ies</span><br>baby → babies</div></div>'},
+         {type:'examples', title:'变化规则', grammy:'看看这些例子：',
+          examples:[
+            {en:'one <span class="hl-w">bus</span> → two <span class="hl-w">buses</span>', zh:'一辆公交→两辆', tags:[{text:'加 es',cls:'t1'}]},
+            {en:'one <span class="hl-w">baby</span> → three <span class="hl-w">babies</span>', zh:'一个宝宝→三个', tags:[{text:'y→ies',cls:'t2'}]},
+            {en:'one <span class="hl-w">box</span> → four <span class="hl-w">boxes</span>', zh:'一个盒子→四个', tags:[{text:'x→es',cls:'t1'}]},
+          ]},
+         {type:'interactive', title:'变复数', grammy:'把 one baby 变成复数：',
+          sentence:'one baby, three ___', blank:0,
+          options:['babys','babies','babyes','baby'],
+          correct:'babies', hint:'辅音+y结尾 → y变ies',
+          explanation:'baby → babies (y变i加es)'},
+       ]},
+      {id:'b2l2', num:2, name:'物主形容词', nameEn:'Possessive Adj', icon:'👤',
+       desc:'my/your/his/her/its/our/their',
+       pages:[
+         {type:'intro', title:'"我的""你的""他的"', grammy:'英语里用 my/your/his/her/its/our/their 来表示"谁的"。',
+          content:'<div class="rule-box"><div class="r-title">👤 物主形容词</div><div class="r-body"><span class="r-hl">my</span> 我的 &nbsp; <span class="r-hl">your</span> 你的<br><span class="r-hl">his</span> 他的 &nbsp; <span class="r-hl">her</span> 她的<br><span class="r-hl">its</span> 它的 &nbsp; <span class="r-hl">our</span> 我们的<br><span class="r-hl">their</span> 他们的</div></div>'},
+         {type:'examples', title:'物主形容词的用法', grammy:'它们永远放在名词前面：',
+          examples:[
+            {en:'This is <span class="hl-w">my</span> book.', zh:'这是我的书。', tags:[{text:'my + 名词',cls:'t1'}]},
+            {en:'<span class="hl-w">Her</span> cat is cute.', zh:'她的猫很可爱。', tags:[{text:'her + 名词',cls:'t2'}]},
+            {en:'<span class="hl-w">Their</span> house is big.', zh:'他们的房子很大。', tags:[{text:'their + 名词',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'选对的词', grammy:'"她的狗"用哪个？',
+          sentence:'___ dog is very friendly.', blank:0,
+          options:['My','His','Her','Its'],
+          correct:'Her', hint:'"她的" = her',
+          explanation:'her dog = 她的狗'},
+       ]},
+      {id:'b2l3', num:3, name:'比较级', nameEn:'Comparatives', icon:'📏',
+       desc:'big → bigger, tall → taller',
+       pages:[
+         {type:'intro', title:'形容词比较级', grammy:'当我们要比较两样东西的时候，形容词要变一变！短的形容词加 -er。',
+          content:'<div class="rule-box"><div class="r-title">📏 比较级规则</div><div class="r-body">短形容词 + <span class="r-hl">er</span><br>tall → <span class="r-hl">taller</span> 更高的<br>big → <span class="r-hl">bigger</span> 更大的（双写g）</div></div>'},
+         {type:'examples', title:'比一比', grammy:'看看谁比谁更高、更大、更快：',
+          examples:[
+            {en:'A giraffe is <span class="hl-w">taller</span> than a horse.', zh:'长颈鹿比马高。', tags:[{text:'tall + er = taller',cls:'t1'}]},
+            {en:'An elephant is <span class="hl-w">bigger</span> than a cat.', zh:'大象比猫大。', tags:[{text:'big → bigger (双写g)',cls:'t2'}]},
+            {en:'A car is <span class="hl-w">faster</span> than a bike.', zh:'汽车比自行车快。', tags:[{text:'fast + er = faster',cls:'t1'}]},
+          ]},
+         {type:'interactive', title:'变比较级', grammy:'"更高"怎么说？',
+          sentence:'A giraffe is ___ than a horse.', blank:0,
+          options:['tall','taller','tallest','more tall'],
+          correct:'taller', hint:'短形容词 tall 加 er',
+          explanation:'tall + er = taller'},
+       ]},
+      {id:'b2l4', num:4, name:'冠词', nameEn:'Articles', icon:'🎯',
+       desc:'a / an / the 的用法',
+       pages:[
+         {type:'intro', title:'冠词 a, an, the', grammy:'冠词 (Articles) 放在名词前面。a 和 an 表示"一个"，the 表示"这个/那个"。',
+          content:'<div class="rule-box"><div class="r-title">🎯 冠词规则</div><div class="r-body"><span class="r-hl">a</span> + 辅音开头的词：a dog<br><span class="r-hl">an</span> + 元音开头的词：an apple<br><span class="r-hl">the</span> 特指某个：the book I read</div></div>'},
+         {type:'examples', title:'a vs an', grammy:'怎么判断用 a 还是 an？看单词的开头发音！',
+          examples:[
+            {en:'<span class="hl-w">a</span> cat &nbsp; <span class="hl-w">a</span> dog &nbsp; <span class="hl-w">a</span> book', zh:'辅音开头 → a', tags:[{text:'a',cls:'t1'}]},
+            {en:'<span class="hl-w">an</span> apple &nbsp; <span class="hl-w">an</span> elephant &nbsp; <span class="hl-w">an</span> hour', zh:'元音开头 → an', tags:[{text:'an',cls:'t2'}]},
+            {en:'<span class="hl-w">The</span> cat I saw yesterday is black.', zh:'特指某只猫 → the', tags:[{text:'the 特指',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'a 还是 an？', grammy:'____ apple，用 a 还是 an？',
+          sentence:'___ apple a day keeps the doctor away.', blank:0,
+          options:['a','an','the'],
+          correct:'an', hint:'apple 是元音开头',
+          explanation:'apple 以元音 a 开头，用 an。'},
+       ]},
+      {id:'b2l5', num:5, name:'可数/不可数', nameEn:'Countable/Uncountable', icon:'📦',
+       desc:'可数名词和不可数名词',
+       pages:[
+         {type:'intro', title:'可数 vs 不可数', grammy:'有些东西可以数（一个苹果、两个苹果），有些不能数（水、牛奶）。这就是可数名词和不可数名词的区别！',
+          content:'<div class="rule-box"><div class="r-title">📦 可数 不可数</div><div class="r-body"><span class="r-hl">可数名词</span>：可以数，有复数<br>apple, cat, book, boy<br><span class="r-hl">不可数名词</span>：不能数，没有复数<br>water, milk, rice, air</div></div>'},
+         {type:'examples', title:'哪些可数？哪些不可数？', grammy:'把下面的词分成两类：',
+          examples:[
+            {en:'<span class="hl-w">apples</span> 🍎 — 可数', zh:'可以说 one apple, two apples', tags:[{text:'✅ 可数',cls:'t1'}]},
+            {en:'<span class="hl-w">water</span> 💧 — 不可数', zh:'不能说 one water, two waters', tags:[{text:'❌ 不可数',cls:'t2'}]},
+            {en:'<span class="hl-w">books</span> 📚 — 可数 &nbsp; <span class="hl-w">milk</span> 🥛 — 不可数', zh:'', tags:[{text:'对比',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'可数还是不可数？', grammy:'"rice"（米饭）是可数还是不可数？',
+          sentence:'I eat ___ rice every day.', blank:0,
+          options:['many','much','a few','some'],
+          correct:'some', hint:'rice 不可数，不能用 many/a few',
+          explanation:'rice 是不可数名词，用 some 修饰。'},
+       ]},
+      {id:'b2l6', num:6, name:'一般现在时', nameEn:'Present Simple', icon:'🕐',
+       desc:'I eat, He eats 的规则',
+       pages:[
+         {type:'intro', title:'一般现在时', grammy:'一般现在时 (Present Simple) 用来表示经常做的事或事实。注意：He/She/It 后面的动词要加 s！',
+          content:'<div class="rule-box"><div class="r-title">🕐 一般现在时规则</div><div class="r-body"><span class="r-hl">I/You/We/They</span> + 动词原形<br>I eat apples.<br><span class="r-hl">He/She/It</span> + 动词加 s<br>She eats apples.</div></div>'},
+         {type:'examples', title:'动词的变化', grammy:'注意 he/she/it 后面动词要加 s 哦！',
+          examples:[
+            {en:'I <span class="hl-w">eat</span> breakfast at 7.', zh:'我7点吃早餐。', tags:[{text:'I + eat',cls:'t1'}]},
+            {en:'She <span class="hl-w">eats</span> breakfast at 7.', zh:'她7点吃早餐。', tags:[{text:'She + eats (+s)',cls:'t2'}]},
+            {en:'They <span class="hl-w">play</span> football.', zh:'他们踢足球。', tags:[{text:'They + play',cls:'t1'}]},
+            {en:'He <span class="hl-w">plays</span> football.', zh:'他踢足球。', tags:[{text:'He + plays (+s)',cls:'t3'}]},
+          ]},
+         {type:'interactive', title:'加不加 s？', grammy:'He ___ (eat) apples. 填哪个？',
+          sentence:'He ___ apples every day.', blank:0,
+          options:['eat','eats','eating'],
+          correct:'eats', hint:'He 后面动词要加 s',
+          explanation:'He + eats (一般现在时，第三人称加s)'},
+       ]},
+    ]},
+  {
+    id:3, icon:'📕', name:'深入篇', nameEn:'Advanced',
+    color:'c3', desc:'代词、副词、完成时、被动语态',
+    lessons:[], // Locked - placeholder
+  },
+  {
+    id:4, icon:'📗', name:'精通篇', nameEn:'Master',
+    color:'c4', desc:'关系代词、条件句、虚拟语气',
+    lessons:[], // Locked - placeholder
+  },
+];
+
+// ======================================================================
+// STATE
+// ======================================================================
+const STORAGE_KEY = 'grammar_picture_book_v1';
+let state = loadState();
+let currentBookId = null;
+let currentLessonId = null;
+let currentPageIdx = 0;
+let interactiveAnswered = false;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { completedLessons: [], stars: {}, lastVisit: null };
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+// ======================================================================
+// NAVIGATION
+// ======================================================================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + id);
+  if (el) el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome() {
+  showPage('home');
+  renderHome();
+}
+
+function dismissWelcome() {
+  const el = document.getElementById('welcomeOverlay');
+  el.classList.add('hide');
+  setTimeout(() => { el.style.display = 'none'; }, 600);
+}
+
+// ======================================================================
+// RENDER: HOME
+// ======================================================================
+function renderHome() {
+  let totalStars = 0;
+  let totalDone = state.completedLessons.length;
+  let totalAll = 0;
+  BOOKS.forEach(b => { totalAll += b.lessons.length; });
+  Object.values(state.stars).forEach(s => totalStars += s);
+  const pct = totalAll > 0 ? Math.round((totalDone / totalAll) * 100) : 0;
+
+  document.getElementById('totalStars').textContent = totalStars;
+  document.getElementById('totalLessons').textContent = totalDone;
+  document.getElementById('totalProgress').textContent = pct + '%';
+
+  const shelf = document.getElementById('bookshelf');
+  shelf.innerHTML = BOOKS.map(b => {
+    const done = b.lessons.filter(l => state.completedLessons.includes(l.id)).length;
+    const total = b.lessons.length;
+    const unlocked = b.lessons.length > 0;
+    const locked = b.lessons.length === 0;
+    const allDone = unlocked && done === total;
+
+    let badge = '';
+    if (locked) badge = '<span class="status-badge locked">🔒 未解锁</span>';
+    else if (allDone) badge = '<span class="status-badge done">✅ 已完成</span>';
+    else if (done > 0) badge = '<span class="status-badge doing">📖 学习中</span>';
+    else badge = '<span class="status-badge new">👉 开始</span>';
+
+    const progStr = locked ? '' : `${done}/${total} 课`;
+
+    return `<div class="book-card ${locked ? 'locked' : ''}" onclick="${locked ? '' : "openBook("+b.id+")"}">
+      <div class="cover ${b.color}">${b.icon}</div>
+      <div class="info">
+        <div class="name">第${b.id}册 ${b.name}<span class="en">${b.nameEn}</span></div>
+        <div class="desc">${b.desc}</div>
+        ${progStr ? '<div class="progress">' + progStr + '</div>' : ''}
+      </div>
+      ${locked ? '<span class="lock-icon">🔒</span>' : badge}
+    </div>`;
+  }).join('');
+}
+
+// ======================================================================
+// CHAPTERS
+// ======================================================================
+function openBook(bookId) {
+  currentBookId = bookId;
+  const book = BOOKS.find(b => b.id === bookId);
+  if (!book || book.lessons.length === 0) return;
+
+  const done = book.lessons.filter(l => state.completedLessons.includes(l.id)).length;
+  document.getElementById('chaptersTitle').textContent = `第${book.id}册 ${book.name}`;
+  document.getElementById('chaptersSub').textContent = `${done}/${book.lessons.length}`;
+
+  const list = document.getElementById('chapterList');
+  list.innerHTML = book.lessons.map(l => {
+    const completed = state.completedLessons.includes(l.id);
+    const stars = state.stars[l.id] || 0;
+    const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+    return `<div class="chapter-item ${completed ? 'done' : ''}" onclick="startLesson('${l.id}')">
+      <div class="num n${bookId}">${l.num}</div>
+      <div class="info">
+        <div class="name">第${l.num}课 ${l.name}<span class="en">${l.nameEn}</span></div>
+        <div class="desc">${l.desc}</div>
+      </div>
+      <div class="star">${starStr}</div>
+    </div>`;
+  }).join('');
+
+  showPage('chapters');
+}
+
+// ======================================================================
+// LESSON
+// ======================================================================
+function startLesson(lessonId) {
+  currentLessonId = lessonId;
+  currentPageIdx = 0;
+  interactiveAnswered = false;
+
+  const lesson = findLesson(lessonId);
+  if (!lesson) return;
+
+  document.getElementById('lessonTitle').textContent = `${lesson.icon} 第${lesson.num}课 ${lesson.name}`;
+  renderLessonPage();
+  showPage('lesson');
+}
+
+function findLesson(lessonId) {
+  for (const b of BOOKS) {
+    for (const l of b.lessons) {
+      if (l.id === lessonId) return l;
+    }
+  }
+  return null;
+}
+
+function findBookByLesson(lessonId) {
+  for (const b of BOOKS) {
+    if (b.lessons.some(l => l.id === lessonId)) return b;
+  }
+  return null;
+}
+
+function renderLessonPage() {
+  const lesson = findLesson(currentLessonId);
+  if (!lesson) return;
+  const pages = lesson.pages;
+  const page = pages[currentPageIdx];
+  if (!page) return;
+
+  document.getElementById('lessonPageCounter').textContent = `${currentPageIdx+1}/${pages.length}`;
+
+  // Dots
+  const dots = document.getElementById('pageDots');
+  dots.innerHTML = pages.map((_, i) =>
+    `<span class="dot ${i === currentPageIdx ? 'active' : ''}"></span>`
+  ).join('');
+
+  // Prev/Next buttons
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  prevBtn.style.visibility = currentPageIdx === 0 ? 'hidden' : 'visible';
+
+  if (currentPageIdx === pages.length - 1) {
+    nextBtn.textContent = '🎉 完成！';
+    nextBtn.className = 'nav-btn finish';
+    nextBtn.onclick = completeLesson;
+  } else {
+    nextBtn.textContent = '下页 →';
+    nextBtn.className = 'nav-btn next';
+    nextBtn.onclick = nextPage;
+  }
+
+  // Render content
+  const container = document.getElementById('lessonContent');
+  const pageNum = currentPageIdx + 1;
+
+  let html = `<div class="lesson-page">`;
+  html += `<span class="page-num">📄 ${pageNum}/${pages.length}</span>`;
+
+  // Grammy
+  if (page.grammy) {
+    html += `<div class="grammy-box"><span class="g-icon">🐱</span><div class="g-text">${page.grammy}</div></div>`;
+  }
+
+  switch (page.type) {
+    case 'intro':
+      html += `<h3>${page.title}</h3>`;
+      html += page.content || '';
+      break;
+
+    case 'cards':
+      html += `<h3>👆 ${page.title}</h3>`;
+      html += `<div class="reveal-grid">`;
+      page.items.forEach((item, i) => {
+        html += `<div class="reveal-card" onclick="flipCard(this)">
+          <div class="front">${item.front}</div>
+          <div class="back">${item.back}</div>
+        </div>`;
+      });
+      html += `</div>`;
+      break;
+
+    case 'examples':
+      html += `<h3>📝 ${page.title}</h3>`;
+      if (page.examples) {
+        page.examples.forEach(ex => {
+          html += `<div class="example-card">
+            <div class="ex-en">${ex.en}</div>
+            ${ex.zh ? '<div class="ex-zh">' + ex.zh + '</div>' : ''}
+            ${ex.tags ? ex.tags.map(t => '<span class="ex-tag ' + t.cls + '">' + t.text + '</span>').join(' ') : ''}
+          </div>`;
+        });
+      }
+      break;
+
+    case 'interactive':
+      html += `<h3>🎮 ${page.title}</h3>`;
+      html += renderInteractive(page);
+      break;
+  }
+
+  html += `</div>`;
+  container.innerHTML = html;
+}
+
+function nextPage() {
+  const lesson = findLesson(currentLessonId);
+  if (!lesson || currentPageIdx >= lesson.pages.length - 1) return;
+  currentPageIdx++;
+  interactiveAnswered = false;
+  renderLessonPage();
+}
+
+function prevPage() {
+  if (currentPageIdx <= 0) return;
+  currentPageIdx--;
+  interactiveAnswered = false;
+  renderLessonPage();
+}
+
+function exitLesson() {
+  goHome();
+}
+
+function flipCard(el) {
+  el.classList.toggle('flipped');
+}
+
+// ======================================================================
+// INTERACTIVE RENDER
+// ======================================================================
+function renderInteractive(page) {
+  let html = `<div class="interactive-zone">`;
+  html += `<div class="iz-title">🎮 ${page.title}</div>`;
+
+  if (page.isPluralGame) {
+    // Plural game: show pairs
+    html += `<div style="font-size:.9rem;color:#666;margin-bottom:12px">点击选择正确的复数形式：</div>`;
+    html += `<div class="options-row">`;
+    page.options.forEach(opt => {
+      html += `<span class="opt-chip" onclick="checkPlural('${opt}','${page.correctPlural}',this)">${opt}</span>`;
+    });
+    html += `</div>`;
+    html += `<div class="iz-feedback" id="pluralFb"></div>`;
+
+  } else if (page.isJudge) {
+    // Judge (sentence vs phrase)
+    html += `<div style="font-size:1.1rem;font-weight:600;margin-bottom:14px">${page.sentence}</div>`;
+    html += `<div class="options-row">`;
+    html += `<span class="opt-chip" onclick="judgeAnswer('sentence','${page.correctAnswer}',this)">✅ 句子</span>`;
+    html += `<span class="opt-chip" onclick="judgeAnswer('phrase','${page.correctAnswer}',this)">❌ 短语</span>`;
+    html += `</div>`;
+    html += `<div class="iz-feedback" id="judgeFb"></div>`;
+
+  } else if (page.highlightWords) {
+    // Click words in sentence
+    html += `<div style="font-size:1.05rem;font-weight:600;margin-bottom:14px;line-height:2">`;
+    const words = page.sentence.split(' ');
+    words.forEach(w => {
+      const clean = w.replace(/[.,!?;:]/g, '');
+      const punct = w.replace(clean, '');
+      const isHl = page.highlightWords.some(h => h.word === clean);
+      if (isHl) {
+        html += `<span class="hl" onclick="highlightWord('${clean}',this)">${clean}</span>${punct} `;
+      } else {
+        html += `${w} `;
+      }
+    });
+    html += `</div>`;
+    html += `<div class="iz-feedback" id="hlFb"></div>`;
+
+  } else if (page.sentence !== undefined) {
+    // Fill blank with options
+    const parts = page.sentence.split('___');
+    html += `<div class="sentence">`;
+    html += parts[0];
+    html += `<span class="blank" id="fillBlank"></span>`;
+    html += parts.length > 1 ? parts[1] : '';
+    html += `</div>`;
+    html += `<div class="options-row" id="optRow">`;
+    page.options.forEach(opt => {
+      html += `<span class="opt-chip" onclick="fillBlank('${opt}','${page.correct}',this)">${opt}</span>`;
+    });
+    html += `</div>`;
+    html += `<div class="iz-feedback" id="fillFb"></div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+// ======================================================================
+// INTERACTIVE HANDLERS
+// ======================================================================
+function fillBlank(selected, correct, el) {
+  if (interactiveAnswered) return;
+  const fb = document.getElementById('fillFb');
+  const blank = document.getElementById('fillBlank');
+
+  if (selected === correct) {
+    interactiveAnswered = true;
+    blank.textContent = selected;
+    blank.className = 'blank filled';
+    fb.className = 'iz-feedback ok';
+    fb.innerHTML = '✅ 答对了！太棒了！🎉';
+    document.querySelectorAll('#optRow .opt-chip').forEach(c => c.style.pointerEvents = 'none');
+  } else {
+    fb.className = 'iz-feedback fail';
+    fb.innerHTML = '💪 再想想哦～';
+    el.classList.add('wrong');
+    setTimeout(() => el.classList.remove('wrong'), 500);
+  }
+}
+
+function checkPlural(selected, correct, el) {
+  if (interactiveAnswered) return;
+  const fb = document.getElementById('pluralFb');
+  if (selected === correct) {
+    interactiveAnswered = true;
+    fb.className = 'iz-feedback ok';
+    fb.innerHTML = '✅ 正确！👍 太棒了！';
+    el.classList.add('selected');
+    document.querySelectorAll('.opt-chip').forEach(c => c.style.pointerEvents = 'none');
+  } else {
+    fb.className = 'iz-feedback fail';
+    fb.innerHTML = '❌ 再想想哦～这个变化规则不太一样';
+    el.classList.add('wrong');
+    setTimeout(() => el.classList.remove('wrong'), 500);
+  }
+}
+
+function judgeAnswer(selected, correct, el) {
+  if (interactiveAnswered) return;
+  const fb = document.getElementById('judgeFb');
+  const lesson = findLesson(currentLessonId);
+  const page = lesson.pages[currentPageIdx];
+
+  if (selected === correct) {
+    interactiveAnswered = true;
+    fb.className = 'iz-feedback ok';
+    fb.innerHTML = '✅ 没错！' + (page.explanation || '');
+    el.classList.add('selected');
+    document.querySelectorAll('.opt-chip').forEach(c => c.style.pointerEvents = 'none');
+  } else {
+    fb.className = 'iz-feedback fail';
+    fb.innerHTML = '💪 ' + (page.explanation || '再想想！');
+    el.classList.add('wrong');
+    setTimeout(() => el.classList.remove('wrong'), 500);
+  }
+}
+
+let hlFound = 0;
+function highlightWord(word, el) {
+  if (interactiveAnswered) return;
+  const lesson = findLesson(currentLessonId);
+  const page = lesson.pages[currentPageIdx];
+  const fb = document.getElementById('hlFb');
+
+  el.style.background = '#FFE66D';
+  el.style.borderRadius = '4px';
+  el.style.padding = '0 4px';
+
+  const match = page.highlightWords.find(h => h.word === word);
+  if (match) {
+    hlFound++;
+    const total = page.highlightWords.length;
+    if (hlFound >= total) {
+      interactiveAnswered = true;
+      fb.className = 'iz-feedback ok';
+      fb.innerHTML = page.message || '🎉 全部找到了！太棒了！';
+    } else {
+      fb.className = 'iz-feedback ok';
+      fb.innerHTML = `👍 找到了"${word}"！还差 ${total - hlFound} 个`;
+    }
+  }
+}
+
+// ======================================================================
+// COMPLETE LESSON
+// ======================================================================
+function completeLesson() {
+  const lesson = findLesson(currentLessonId);
+  if (!lesson) return;
+
+  // Mark as completed
+  if (!state.completedLessons.includes(lesson.id)) {
+    state.completedLessons.push(lesson.id);
+  }
+
+  // Give stars (1 star for completing)
+  const currentStars = state.stars[lesson.id] || 0;
+  if (currentStars < 1) {
+    state.stars[lesson.id] = 1;
+  }
+  saveState();
+
+  // Show celebration
+  showCelebration(lesson);
+}
+
+function showCelebration(lesson) {
+  const overlay = document.createElement('div');
+  overlay.className = 'complete-overlay';
+  overlay.id = 'completeOverlay';
+  overlay.innerHTML = `
+    <div class="complete-modal">
+      <span class="big-icon">🐱</span>
+      <div class="star-display">
+        <span class="s">⭐</span><span class="s">⭐</span><span class="s">⭐</span>
+      </div>
+      <div class="title">🎉 太棒了！</div>
+      <div class="sub">你完成了「第${lesson.num}课 ${lesson.name}」<br>Grammy 为你鼓掌！👏</div>
+      <div class="btn-group">
+        <button class="btn-primary" onclick="closeCelebrationAndGoChapters()">📚 继续下一课</button>
+        <button class="btn-secondary" onclick="closeCelebration()">🏠 回首页</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Confetti
+  spawnConfetti();
+
+  // Update home stats
+  renderHome();
+}
+
+function closeCelebration() {
+  const el = document.getElementById('completeOverlay');
+  if (el) el.remove();
+  goHome();
+}
+
+function closeCelebrationAndGoChapters() {
+  const el = document.getElementById('completeOverlay');
+  if (el) el.remove();
+  const book = findBookByLesson(currentLessonId);
+  if (book) openBook(book.id);
+}
+
+function spawnConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-box';
+  const colors = ['#FF6B6B','#4ECDC4','#FFE66D','#A29BFE','#fd79a8','#fdcb6e','#00cec9','#e17055'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.width = (Math.random() * 8 + 4) + 'px';
+    p.style.height = (Math.random() * 8 + 4) + 'px';
+    p.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    p.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    p.style.animationDelay = (Math.random() * 1.5) + 's';
+    container.appendChild(p);
+  }
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), 4000);
+}
+
+// ======================================================================
+// INIT
+// ======================================================================
+renderHome();
+
+// Save visit
+state.lastVisit = new Date().toISOString();
+saveState();
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') prevPage();
+  if (e.key === 'ArrowRight') {
+    const lesson = findLesson(currentLessonId);
+    if (lesson && currentPageIdx >= lesson.pages.length - 1) completeLesson();
+    else nextPage();
+  }
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => {
+  if (!document.getElementById('page-lesson').classList.contains('active')) return;
+  touchStartX = e.touches[0].clientX;
+});
+document.addEventListener('touchend', e => {
+  if (!document.getElementById('page-lesson').classList.contains('active')) return;
+  const diff = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(diff) > 60) {
+    if (diff < 0) {
+      const lesson = findLesson(currentLessonId);
+      if (lesson && currentPageIdx >= lesson.pages.length - 1) completeLesson();
+      else nextPage();
+    } else {
+      prevPage();
+    }
+  }
+});
+</script>
+</body>
+</html>
